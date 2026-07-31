@@ -127,6 +127,8 @@ type XAIConfig struct {
 // CodexConfig configures provider-wide Codex request behavior.
 type CodexConfig struct {
 	IdentityConfuse bool `yaml:"identity-confuse" json:"identity-confuse"`
+	// AdditionalInstructions appends provider-wide developer instructions to every Codex request.
+	AdditionalInstructions string `yaml:"additional-instructions" json:"additional-instructions"`
 	// DisableCodexCloaking disables forcing the official Codex identity headers on HTTP requests.
 	DisableCodexCloaking bool `yaml:"disable-codex-cloaking" json:"disable-codex-cloaking"`
 	// OptimizeMultiAgentV2 optimizes official Codex multi-agent requests.

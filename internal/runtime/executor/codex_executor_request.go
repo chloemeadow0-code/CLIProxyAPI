@@ -358,10 +358,22 @@ func applyCodexHeadersFromSources(r *http.Request, auth *cliproxyauth.Auth, toke
 	}
 }
 
-func normalizeCodexInstructions(body []byte) []byte {
+func normalizeCodexInstructions(body []byte, cfg *config.Config) []byte {
 	instructions := gjson.GetBytes(body, "instructions")
 	if !instructions.Exists() || instructions.Type == gjson.Null {
 		body, _ = sjson.SetBytes(body, "instructions", "")
+		instructions = gjson.GetBytes(body, "instructions")
+	}
+	if cfg != nil {
+		additional := strings.TrimSpace(cfg.Codex.AdditionalInstructions)
+		if additional != "" {
+			current := strings.TrimSpace(instructions.String())
+			if current == "" {
+				body, _ = sjson.SetBytes(body, "instructions", additional)
+			} else {
+				body, _ = sjson.SetBytes(body, "instructions", current+"\n\n"+additional)
+			}
+		}
 	}
 	return body
 }
