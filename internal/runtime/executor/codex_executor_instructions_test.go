@@ -14,14 +14,6 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-func TestNormalizeCodexInstructionsAppendsConfiguredInstructions(t *testing.T) {
-	cfg := &config.Config{Codex: config.CodexConfig{AdditionalInstructions: "custom instruction"}}
-	body := normalizeCodexInstructions([]byte(`{"instructions":"client instruction","input":"hello"}`), cfg)
-	if got := gjson.GetBytes(body, "instructions").String(); got != "client instruction\n\ncustom instruction" {
-		t.Fatalf("instructions = %q", got)
-	}
-}
-
 func TestCodexExecutorExecuteNormalizesNullInstructions(t *testing.T) {
 	var gotPath string
 	var gotBody []byte
